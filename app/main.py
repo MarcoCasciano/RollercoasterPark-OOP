@@ -109,7 +109,7 @@ class Ragazzo(Umano):
             cognome: cognome del ragazzo
         """
         attrazioni_desiderate = random.sample(LISTA_ATTRAZIONI_RAGAZZI, k=len(LISTA_ATTRAZIONI_RAGAZZI))
-        super().__init__(posizione, nome, cognome, "ragazzo", )
+        super().__init__(posizione, nome, cognome, "ragazzo", attrazioni_desiderate)
 
 
 class Adulto(Umano):
@@ -124,8 +124,8 @@ class Adulto(Umano):
             nome: Nome dell'adulto
             cognome: Cognome dell'adulto
         """
-        desideri = random.sample(LISTA_ATTRAZIONI_BAMBINI, k=len(LISTA_ATTRAZIONI_BAMBINI))
-        super().__init__(posizione, nome, cognome, "adulto", desideri)
+        attrazioni_desiderate = random.sample(LISTA_ATTRAZIONI_BAMBINI, k=len(LISTA_ATTRAZIONI_BAMBINI))
+        super().__init__(posizione, nome, cognome, "adulto", attrazioni_desiderate)
 
 
 class Location:
@@ -186,18 +186,25 @@ class Attrazione(Location):
         Fa salire un cliente sull'attrazione se disponibile.
 
         Args:
-            cliente: il cliente da far salire
+            cliente: l'Umano da far salire
 
         Returns:
             True se il cliente è salito con successo, altrimenti False
         """
-        if self.attrazione_disponibile():
-            self.clienti_a_bordo.append(cliente)
-            self.capienza_attuale -= 1
-            attrazione_completata = cliente.attrazioni_desiderate.pop(0)
-            cliente.attrazioni_completate.append(attrazione_completata)
-            return True
-        return False
+        if not self.attrazione_disponibile():
+            return False
+
+        # 1. Gestione Attrazione
+        self.clienti_a_bordo.append(cliente)
+        self.capienza_attuale -= 1
+
+        # 2. Gestione Cliente (Sposta il desiderio solo qui!)
+        if cliente.attrazioni_desiderate:
+            # Usiamo pop(0) solo nel momento in cui siamo certi del carico
+            completata = cliente.attrazioni_desiderate.pop(0)
+            cliente.attrazioni_completate.append(completata)
+
+        return True
 
     def aggiungi_a_coda(self, cliente: Umano):
         """

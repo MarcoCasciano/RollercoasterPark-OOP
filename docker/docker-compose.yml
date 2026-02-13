@@ -1,0 +1,69 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rollercoaster_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+
+# seconda versione
+
+  services:
+    # Servizio PostgreSQL
+    postgres:
+      image: postgres:16-alpine
+      # alpine: versione leggera di Linux
+
+      container_name: rollercoaster_db
+      # Nome del container Docker
+
+      restart: unless-stopped
+      # Riavvia automaticamente il container se crasha
+
+      environment:
+        # Variabili d'ambiente per configurare PostgreSQL
+        POSTGRES_USER: rollercoaster_user
+        POSTGRES_PASSWORD: rollercoaster_pass_2024
+        POSTGRES_DB: rollercoaster_db
+        # Questi sono i dati di accesso che userai dopo
+
+      ports:
+        - "5432:5432"
+        # Mappa porta container -> porta host
+        # Formato: "porta_macchina:porta_container"
+        # 5432 è la porta standard di PostgreSQL
+
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+        # Volume persistente per i dati
+        # Anche se elimini il container, i dati restano
+
+      healthcheck:
+        # Verifica che il database sia pronto ad accettare connessioni
+        test: [ "CMD-SHELL", "pg_isready -U rollercoaster_user -d rollercoaster_db" ]
+        interval: 10s
+        # Controlla ogni 10 secondi
+        timeout: 5s
+        # Timeout dopo 5 secondi
+        retries: 5
+        # Prova 5 volte prima di considerarlo "unhealthy"
+
+  volumes:
+    # Definizione volume per persistenza dati
+    postgres_data:
+      driver: local
