@@ -1,0 +1,13 @@
+# mi servono solo in locale, non ha senso pusharli
+# file sistema
+.DS_Store
+# python
+__pycache__/
+*.pyc
+.env
+# virtual environment
+venv/
+.venv/
+# ide vs code
+.vscode/
+.idea/
