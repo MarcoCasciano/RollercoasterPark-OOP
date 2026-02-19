@@ -1,13 +1,21 @@
-# mi servono solo in locale, non ha senso pusharli
-# file sistema
-.DS_Store
-# python
+# Python
 __pycache__/
-*.pyc
-.env
-# virtual environment
-venv/
+*.py[cod]
+*.pyo
 .venv/
-# ide vs code
+venv/
+*.egg-info/
+
+# Environment
+.env
+.env.*
+
+# Notes
+workflow_notes.md
+
+# IDE
 .vscode/
 .idea/
+
+# OS
+.DS_Store
