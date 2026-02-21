@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.visitatore import VisitatoreRead
 
@@ -22,8 +22,7 @@ class FamigliaUpdate(BaseModel):
 
 
 class FamigliaRead(FamigliaBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     visitatori: list[VisitatoreRead] = []
-
-    class Config:
-        from_attributes = True

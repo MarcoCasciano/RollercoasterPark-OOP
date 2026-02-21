@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.schemas.giro import GiroRead
 
@@ -28,8 +28,7 @@ class VisitatoreUpdate(BaseModel):
 
 
 class VisitatoreRead(VisitatoreBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     giri: list[GiroRead] = []
-
-    class Config:
-        from_attributes = True
